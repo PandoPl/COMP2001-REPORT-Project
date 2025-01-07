@@ -213,6 +213,38 @@ class UserResource(Resource):
         user = AppUser.query.get_or_404(user_id)
         return {'id': user.user_id, 'username': user.username, 'email': user.email, 'role': user.role}, 200
 
+
+    @user_ns.expect(api.model('UpdateUser', {
+        'username': fields.String(description='Username'),
+        'email': fields.String(description='Email'),
+        'password': fields.String(description='Password'),
+        'role': fields.String(description='User role', enum=['admin', 'user']),
+    }))
+    @api.doc(security='BearerAuth')
+    @jwt_required()
+    @admin_required
+    def put(self, user_id):
+        """Update a user by ID (Admin only)."""
+        user = AppUser.query.get_or_404(user_id)
+        data = request.get_json()  # Parse the JSON body containing updated user data
+
+        # Update user fields based on provided data
+        if 'username' in data:
+            user.username = data['username']
+        if 'email' in data:
+            user.email = data['email']
+        if 'password' in data:
+            user.password = data['password']
+        if 'role' in data:
+            user.role = data['role']
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Return the updated user information
+        return {'id': user.user_id, 'username': user.username, 'email': user.email, 'role': user.role}, 200
+
+    @api.doc(security='BearerAuth')
     @jwt_required()
     @admin_required
     def delete(self, user_id):
