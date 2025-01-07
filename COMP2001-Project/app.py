@@ -306,8 +306,6 @@ class TrailResource(Resource):
         if claims.get('role') == 'admin':
             limited_data["trail_description"] = trail.trail_description
             limited_data["user_id"] = trail.user_id
-            limited_data["trail_points"] = trail.trail_points
-            limited_data["trail_features"] = trail.trail_features
 
         return limited_data, 200
 

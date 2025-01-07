@@ -8,7 +8,7 @@ CREATE TABLE CW2.AppUser (
     username NVARCHAR(100) NOT NULL UNIQUE,
     email NVARCHAR(100) NOT NULL UNIQUE,
     password NVARCHAR(200) NOT NULL,
-    role NVARCHAR(10) NOT NULL  -- Either 'Admin' or 'User'
+    role NVARCHAR(10) NOT NULL  -- Either 'admin' or 'user'
 );
 GO
 
