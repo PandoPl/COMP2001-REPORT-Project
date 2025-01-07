@@ -1,0 +1,325 @@
+openapi: 3.0.3
+info:
+  title: Trail Management API
+  description: API for managing Trails, Trail Features, Trail Points, and their relationships.
+  version: 1.0.0
+security:
+  - BearerAuth: []
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+paths:
+  /login:
+    post:
+      summary: Authenticate user and get JWT token
+      tags:
+        - Authentication
+      description: Users should provide email and password to authenticate. Use the returned JWT token by including it in the Authorization header as 'Bearer <token>' for subsequent authorized requests.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: JWT token generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+        '401':
+          description: Invalid email or password
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+
+      responses:
+        '200':
+          description: List of users (Admin Only)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '403':
+          description: Admin access required
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+
+      requestBody:
+        description: User object to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          description: Admin access required
+  /users/{user_id}:
+    get:
+      summary: Get a user by ID
+      tags:
+        - Users
+
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: ID of the user
+      responses:
+        '200':
+          description: User data fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          description: Admin access required
+        '404':
+          description: User not found
+    put:
+      summary: Update a user by ID
+      tags:
+        - Users
+
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: ID of the user to update
+      requestBody:
+        description: Updated user object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: User updated successfully
+        '403':
+          description: Admin access required
+        '404':
+          description: User not found
+    delete:
+      summary: Delete a user by ID
+      tags:
+        - Users
+
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: ID of the user to delete
+      responses:
+        '204':
+          description: User deleted successfully
+        '403':
+          description: Admin access required
+        '404':
+          description: User not found
+  /trails:
+    get:
+      summary: Get all trails
+      tags:
+        - Trails
+
+      responses:
+        '200':
+          description: A list of trails
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trail'
+    post:
+      summary: Create a new trail
+      tags:
+        - Trails
+
+      requestBody:
+        description: Trail object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrailInput'
+      responses:
+        '201':
+          description: Trail created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trail'
+  /trails/{trail_id}:
+    get:
+      summary: Get a trail by its ID
+      tags:
+        - Trails
+
+      parameters:
+        - in: path
+          name: trail_id
+          schema:
+            type: integer
+          required: true
+          description: ID of the trail
+      responses:
+        '200':
+          description: A single trail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trail'
+        '404':
+          description: Trail not found
+    put:
+      summary: Update a trail by its ID
+      tags:
+        - Trails
+
+      parameters:
+        - in: path
+          name: trail_id
+          schema:
+            type: integer
+          required: true
+          description: ID of the trail to update
+      requestBody:
+        description: Updated trail information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrailInput'
+      responses:
+        '200':
+          description: Trail updated successfully
+        '404':
+          description: Trail not found
+    delete:
+      summary: Delete a trail by its ID
+      tags:
+        - Trails
+
+      parameters:
+        - in: path
+          name: trail_id
+          schema:
+            type: integer
+          required: true
+          description: ID of the trail to delete
+      responses:
+        '204':
+          description: Trail deleted successfully
+        '404':
+          description: Trail not found
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+    AuthToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+    Trail:
+      type: object
+      properties:
+        trail_id:
+          type: integer
+        trail_name:
+          type: string
+        trail_summary:
+          type: string
+        trail_description:
+          type: string
+        difficulty:
+          type: string
+        location:
+          type: string
+        length:
+          type: number
+          format: float
+        elevation_gain:
+          type: number
+          format: float
+        route_type:
+          type: string
+        user_id:
+          type: integer
+    TrailInput:
+      type: object
+      properties:
+        trail_name:
+          type: string
+        trail_summary:
+          type: string
+        trail_description:
+          type: string
+        difficulty:
+          type: string
+        location:
+          type: string
+        length:
+          type: number
+          format: float
+        elevation_gain:
+          type: number
+          format: float
+        route_type:
+          type: string
+        user_id:
+          type: integer
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+    UserInput:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
