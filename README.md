@@ -1,9 +1,9 @@
 # COMP2001-REPORT-Project
-**Introduction**
+Introduction:
 This is a Trail micro-service application that exposes api endpoints that allow systems to retrieve hiking trail data stored in a SQL 
 This repository contains the source code for a Trail micro-service application that exposes API endpoints that allow various systems to receive hiking trail data that is stored in a SQL server database.
 
-**Features**
+Features:
 Trails can be viewed, created, updated, deleted. Creation, updating and deletion are done by Admins. Normal users can view the trails but not all the information. 
 
 Admins can view, create, update and delete user accounts. 
@@ -12,7 +12,7 @@ Authentication process with JWT tokens.
 
 RESTful app design.
 
-**How to run the app**
+How to run the app:
 Once you run the docker image, head over to the swagger UI.
 
     "username": "Grace Hopper",
