@@ -342,25 +342,5 @@ class TrailResource(Resource):
 
 
 if __name__ == '__main__':
-    with app.app_context():
-        # Call the user import function
-        users = fetch_users_from_auth_api()
-        if users:
-            print("Importing users from Authenticator API...")
-            for user_data in users:
-                existing_user = AppUser.query.filter_by(email=user_data['email']).first()
-                if not existing_user:
-                    new_user = AppUser(
-                        username=user_data['name'],
-                        email=user_data['email'],
-                        password=user_data['password'],
-                        role="user"
-                    )
-                    db.session.add(new_user)
-            db.session.commit()
-            print("Users imported successfully.")
-        else:
-            print("No users fetched from Authenticator API.")
-
     # Start the Flask app
     app.run(host="0.0.0.0", port=8000, debug=True)
