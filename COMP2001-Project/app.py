@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Set up JWT configuration
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
+app.config['JWT_SECRET_KEY'] = 'very_secret_key'
 jwt = JWTManager(app)
 
 authorizations = {
